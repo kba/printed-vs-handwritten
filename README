@@ -27,10 +27,10 @@ own data. To do so, create the following folders:
   lines/training/printed
   lines/validation/handwritten
   lines/validation/printed
-and place your line images in these folders. Train the model by
-running train-model.py, and evaluate it with evaluate-model.py. Training
+and place your line images in these folders. Train the model with
+`ocrd-typegroups-train`, and evaluate it with `ocrd-typegroups-evaluate`. Training
 writes models/classifier.tgc in the working directory. Evaluation uses that
 file when present, otherwise the bundled model.
 
 Usage example:
-python3 classify.py 616.jpg
+ocrd-typegroups-classify 616.jpg

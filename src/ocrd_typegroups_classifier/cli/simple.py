@@ -1,22 +1,24 @@
 """
 OCR-D conformant command line interface
 """
-import sys
+import argparse
 
 from PIL import Image
 
-from ..classifier import TypegroupsClassifier
+from ..typegroups_classifier import TypegroupsClassifier
 
-def cli():
-    """
-    Run on sys.args
-    """
-    if len(sys.argv) < 3 or len(sys.argv) > 4:
-        print('Syntax: %s network-file image-file [stride]' % sys.argv[0])
-        quit(1)
-    network_file = sys.argv[1]
-    image_file = Image.open(sys.argv[2])
-    stride = int(sys.argv[3]) if len(sys.argv) > 3 else 96
-    classifier = TypegroupsClassifier(network_file, stride)
-    result = classifier.run(image_file)
-    print(result)
+
+def cli(argv=None):
+    """Classify an image using an explicitly supplied model file."""
+    parser = argparse.ArgumentParser(description="Classify an image with a model file")
+    parser.add_argument("network_file")
+    parser.add_argument("image_file")
+    parser.add_argument("stride", nargs="?", type=int, default=96)
+    args = parser.parse_args(argv)
+    classifier = TypegroupsClassifier.load(args.network_file)
+    with Image.open(args.image_file) as image:
+        print(classifier.run(image, args.stride))
+
+
+if __name__ == "__main__":
+    cli()

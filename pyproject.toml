@@ -19,6 +19,10 @@ ocrd = {file = ["requirements-ocrd.txt"]}
 
 [project.scripts]
 ocrd-typegroups-classifier = "ocrd_typegroups_classifier.cli.ocrd_cli:cli"
+ocrd-typegroups-classify = "ocrd_typegroups_classifier.cli.classify:main"
+ocrd-typegroups-train = "ocrd_typegroups_classifier.cli.train_model:main"
+ocrd-typegroups-evaluate = "ocrd_typegroups_classifier.cli.evaluate_model:main"
+ocrd-typegroups-simple = "ocrd_typegroups_classifier.cli.simple:cli"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
