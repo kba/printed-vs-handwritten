@@ -36,3 +36,16 @@ file when present, otherwise the bundled model.
 
 Usage example:
 printed-vs-handwritten 616.jpg
+
+To extract line images from PAGE-XML in the TESS file group of every
+`ppns/PPN*` workspace, install `ocrd` and `ocrd-segment-extract-lines`, then run:
+
+    make extract
+
+The target registers images from `DEFAULT/` with the OCR-D Python API when
+that file group is absent from the workspace METS file. Image page IDs are
+`PHYS_0000` and METS file IDs are `FILE_0000_DEFAULT`, with `0000` taken
+from the last four digits of each image filename.
+Output goes to `TESS-LINES`;
+override it with `make extract EXTRACT_GRP=OTHER-GROUP` or use a different
+workspace root with `make extract PPNS=/path/to/ppns`.
