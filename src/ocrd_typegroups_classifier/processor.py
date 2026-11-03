@@ -18,7 +18,7 @@ from .constants import OCRD_TOOL
 class TypegroupsClassifierProcessor(Processor):
 
     def __init__(self, *args, **kwargs):
-        kwargs['ocrd_tool'] = OCRD_TOOL['tools']['ocrd-typegroups-classifier']
+        kwargs['ocrd_tool'] = OCRD_TOOL['tools']['ocrd-printed-vs-handwritten']
         kwargs['version'] = OCRD_TOOL['version']
         super(TypegroupsClassifierProcessor, self).__init__(*args, **kwargs)
         self.log = getLogger('ocrd_typegroups_classifier')

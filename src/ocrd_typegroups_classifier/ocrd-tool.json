@@ -1,10 +1,10 @@
 {
   "version": "0.0.1",
-  "git_url": "https://github.com/seuretm/ocrd_typegroups_classifier",
+  "git_url": "https://github.com/seuretm/printed-vs-handwritten",
   "tools": {
-    "ocrd-typegroups-classifier": {
-      "executable": "ocrd-typegroups-classifier",
-      "description": "Classification of 15th century type groups",
+    "ocrd-printed-vs-handwritten": {
+      "executable": "ocrd-printed-vs-handwritten",
+      "description": "Classification of printed and handwritten text lines",
       "categories": [
         "Text recognition and optimization"
       ],

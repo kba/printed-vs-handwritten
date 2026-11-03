@@ -3,7 +3,7 @@ requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ocrd-typegroups-classifier-printed-handwritten"
+name = "printed-vs-handwritten"
 version = "0.0.1"
 description = "Classify printed and handwritten text lines"
 readme = "README"
@@ -18,11 +18,11 @@ dependencies = {file = ["requirements.txt"]}
 ocrd = {file = ["requirements-ocrd.txt"]}
 
 [project.scripts]
-ocrd-typegroups-classifier = "ocrd_typegroups_classifier.cli.ocrd_cli:cli"
-ocrd-typegroups-classify = "ocrd_typegroups_classifier.cli.classify:main"
-ocrd-typegroups-train = "ocrd_typegroups_classifier.cli.train_model:main"
-ocrd-typegroups-evaluate = "ocrd_typegroups_classifier.cli.evaluate_model:main"
-ocrd-typegroups-simple = "ocrd_typegroups_classifier.cli.simple:cli"
+ocrd-printed-vs-handwritten = "ocrd_typegroups_classifier.cli.ocrd_cli:cli"
+printed-vs-handwritten = "ocrd_typegroups_classifier.cli.classify:main"
+printed-vs-handwritten-train = "ocrd_typegroups_classifier.cli.train_model:main"
+printed-vs-handwritten-evaluate = "ocrd_typegroups_classifier.cli.evaluate_model:main"
+printed-vs-handwritten-simple = "ocrd_typegroups_classifier.cli.simple:cli"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

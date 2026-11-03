@@ -10,6 +10,6 @@ from ..processor import TypegroupsClassifierProcessor
 @ocrd_cli_options
 def cli(*args, **kwargs):
     """
-    Classify typegroups
+    Classify printed and handwritten text lines
     """
     return ocrd_cli_wrap_processor(TypegroupsClassifierProcessor, *args, **kwargs)

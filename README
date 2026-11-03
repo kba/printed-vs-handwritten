@@ -11,6 +11,8 @@ For the OCR-D command, install the optional dependencies:
 The supported PyTorch pair is Torch 1.13 and Torchvision 0.14. Runtime
 dependency ranges are maintained in requirements.txt and read by
 pyproject.toml. OCR-D dependencies are in requirements-ocrd.txt.
+The internal Python package retains its original module name so existing
+serialized model files load without conversion.
 The provided neural network has been trained on:
 * a private dataset for handwritten text lines
   + 9577 training lines
@@ -28,9 +30,9 @@ own data. To do so, create the following folders:
   lines/validation/handwritten
   lines/validation/printed
 and place your line images in these folders. Train the model with
-`ocrd-typegroups-train`, and evaluate it with `ocrd-typegroups-evaluate`. Training
+`printed-vs-handwritten-train`, and evaluate it with `printed-vs-handwritten-evaluate`. Training
 writes models/classifier.tgc in the working directory. Evaluation uses that
 file when present, otherwise the bundled model.
 
 Usage example:
-ocrd-typegroups-classify 616.jpg
+printed-vs-handwritten 616.jpg
