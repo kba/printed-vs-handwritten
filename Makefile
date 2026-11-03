@@ -2,6 +2,7 @@ PPNS ?= ppns
 EXTRACT_GRP ?= TESS_LINES
 CLASSIFY_GRP ?= PRINTED_VS_HANDWRITTEN
 PYTHON ?= python3
+JOBS ?= 4
 
 .DEFAULT_GOAL := help
 .PHONY: help prepare-workspaces extract classify
@@ -42,6 +43,6 @@ classify: ## Classify line images and register JSON results in METS
 		[ -f "$$workspace/mets.xml" ] || { echo "Missing $$workspace/mets.xml" >&2; exit 1; }; \
 		echo "Classifying lines in $$workspace"; \
 		( cd "$$workspace"; $(PYTHON) "$(abspath scripts/classify_lines.py)" \
-		  "$(EXTRACT_GRP)" "$(CLASSIFY_GRP)" ); \
+		  "$(EXTRACT_GRP)" "$(CLASSIFY_GRP)" "$(JOBS)" ); \
 	done; \
 	[ "$$found" -eq 1 ] || { echo "No PPN workspaces found in $(PPNS)" >&2; exit 1; }

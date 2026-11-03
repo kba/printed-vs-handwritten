@@ -50,8 +50,9 @@ that file group is absent from the workspace METS file. Image page IDs are
 `PHYS_0000` and METS file IDs are `FILE_0000_DEFAULT`, with `0000` taken
 from the last four digits of each image filename.
 OCR-D writes line images to `TESS_LINES` and links them to their pages in METS.
-The `classify` target runs `printed-vs-handwritten` on every line image in that
-group and registers one JSON result per image in `PRINTED_VS_HANDWRITTEN`,
-linked to the same page. Override the input and output groups with
-`EXTRACT_GRP` and `CLASSIFY_GRP`. Use a different
+The `classify` target classifies every line image in that group with four
+worker processes, loading the model once per worker. It registers one JSON
+result per image in `PRINTED_VS_HANDWRITTEN`, linked to the same page.
+Set the worker count with `make classify JOBS=2`. Override the input and
+output groups with `EXTRACT_GRP` and `CLASSIFY_GRP`. Use a different
 workspace root with `make extract PPNS=/path/to/ppns`.
