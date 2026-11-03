@@ -29,7 +29,7 @@ extract: ## Extract TESS line images into TESS_LINES
 		found=1; \
 		[ -f "$$workspace/mets.xml" ] || { echo "Missing $$workspace/mets.xml" >&2; exit 1; }; \
 		echo "Extracting lines from $$workspace"; \
-		( cd "$$workspace"; ocrd-segment-extract-lines -m mets.xml -I TESS -O "$(EXTRACT_GRP)" --overwrite ); \
+		( cd "$$workspace"; ocrd-segment-extract-lines --overwrite -P output-types '[]' -m mets.xml -I TESS -O "$(EXTRACT_GRP)" --overwrite ); \
 	done; \
 	[ "$$found" -eq 1 ] || { echo "No PPN workspaces found in $(PPNS)" >&2; exit 1; }
 
