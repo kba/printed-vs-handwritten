@@ -18,7 +18,7 @@ def main(argv=None):
 
     with Image.open(args.image) as img:
         classifier = TypegroupsClassifier.load(args.model)
-        result = classifier.classify(img, 75, 64, False)
+        result = classifier.classify(img.convert("RGB"), 75, 64, False)
 
     total = sum(exp(score) for score in result.values())
     print(json.dumps({label: exp(score) / total for label, score in result.items()}))
