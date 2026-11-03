@@ -8,6 +8,19 @@ from ocrd_typegroups_classifier.data.classmap import ClassMap
 from ocrd_typegroups_classifier.data.classmap import IndexRemap
 
 
+def _prepare_image(pil_image, max_width):
+    if pil_image.width > max_width:
+        height = max(1, round(pil_image.height * max_width / pil_image.width))
+        pil_image = pil_image.resize((max_width, height), Image.BILINEAR)
+    # Five pooling stages need at least 32 pixels in each dimension.
+    if min(pil_image.size) < 32:
+        padded = Image.new("RGB", (max(32, pil_image.width), max(32, pil_image.height)), "white")
+        padded.paste(pil_image.convert("RGB"),
+                     ((padded.width - pil_image.width) // 2,
+                      (padded.height - pil_image.height) // 2))
+        pil_image = padded
+    return pil_image
+
 
 class TypegroupsClassifier:
     """ Class wrapping type group information and a classifier.
@@ -155,8 +168,7 @@ class TypegroupsClassifier:
                 or false.
         """
         
-        if pil_image.size[0]>max_width:
-            pil_image = pil_image.resize((max_width, round(pil_image.size[1]*float(max_width)/pil_image.size[0])), Image.BILINEAR)
+        pil_image = _prepare_image(pil_image, max_width)
         crop_size = min(224, pil_image.size[0])
         crop_size = min(crop_size, pil_image.size[1])
         tensorize = transforms.ToTensor()
