@@ -1,6 +1,7 @@
 """Command line classification of a single text line image."""
 
 import argparse
+import json
 from math import exp
 
 from PIL import Image
@@ -20,7 +21,7 @@ def main(argv=None):
         result = classifier.classify(img, 75, 64, False)
 
     total = sum(exp(score) for score in result.values())
-    print({label: exp(score) / total for label, score in result.items()})
+    print(json.dumps({label: exp(score) / total for label, score in result.items()}))
 
 
 if __name__ == "__main__":
