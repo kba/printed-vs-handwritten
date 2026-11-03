@@ -3,8 +3,13 @@ EXTRACT_GRP ?= TESS_LINES
 CLASSIFY_GRP ?= PRINTED_VS_HANDWRITTEN
 PYTHON ?= python3
 
-.PHONY: prepare-workspaces extract classify
-prepare-workspaces:
+.DEFAULT_GOAL := help
+.PHONY: help prepare-workspaces extract classify
+
+help: ## Show available targets
+	@awk 'BEGIN { FS = ":.*## " } /^[a-zA-Z0-9_.-]+:.*## / { printf "%-20s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+prepare-workspaces: ## Register DEFAULT images in each PPN workspace
 	@set -eu; \
 	found=0; \
 	for workspace in "$(PPNS)"/PPN*; do \
@@ -16,7 +21,7 @@ prepare-workspaces:
 	done; \
 	[ "$$found" -eq 1 ] || { echo "No PPN workspaces found in $(PPNS)" >&2; exit 1; }
 
-extract:
+extract: ## Extract TESS line images into TESS_LINES
 	@set -eu; \
 	found=0; \
 	for workspace in "$(PPNS)"/PPN*; do \
@@ -28,7 +33,7 @@ extract:
 	done; \
 	[ "$$found" -eq 1 ] || { echo "No PPN workspaces found in $(PPNS)" >&2; exit 1; }
 
-classify:
+classify: ## Classify line images and register JSON results in METS
 	@set -eu; \
 	found=0; \
 	for workspace in "$(PPNS)"/PPN*; do \
