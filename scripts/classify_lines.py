@@ -7,6 +7,7 @@ import sys
 
 from ocrd import Resolver
 from ocrd.workspace import Workspace
+from tqdm import tqdm
 
 
 def main(input_group, output_group):
@@ -16,7 +17,7 @@ def main(input_group, output_group):
     if not images:
         raise SystemExit(f"No images in {input_group}")
 
-    for image in images:
+    for image in tqdm(images, desc="Classifying", unit="line"):
         result = subprocess.check_output(
             ["printed-vs-handwritten", image.local_filename], text=True
         )
