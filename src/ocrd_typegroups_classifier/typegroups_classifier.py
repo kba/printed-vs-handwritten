@@ -74,6 +74,11 @@ class TypegroupsClassifier:
         if not type(input) is _io.BufferedReader:
             raise Exception('TypegroupsClassifier.load() requires a string or a file')
         res = pickle.load(input)
+        # Older checkpoints predate this optional AvgPool2d attribute. Pickle
+        # restores the layer state without calling its current constructor.
+        for layer in res.network.modules():
+            if isinstance(layer, torch.nn.AvgPool2d) and not hasattr(layer, 'divisor_override'):
+                layer.divisor_override = None
         # If trained with CUDA and loaded on a device without CUDA
         res.dev = torch.device(res.dev if torch.cuda.is_available() else "cpu")
         res.network.to(res.dev)
