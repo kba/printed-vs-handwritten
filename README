@@ -1,4 +1,16 @@
 System for classifying segmented text lines as printed or handwritten.
+
+Install with Python 3.9 or 3.10:
+
+    python -m pip install -e .
+
+For the OCR-D command, install the optional dependencies:
+
+    python -m pip install -e '.[ocrd]'
+
+The supported PyTorch pair is Torch 1.13 and Torchvision 0.14. Runtime
+dependency ranges are maintained in requirements.txt and read by
+pyproject.toml. OCR-D dependencies are in requirements-ocrd.txt.
 The provided neural network has been trained on:
 * a private dataset for handwritten text lines
   + 9577 training lines
@@ -16,7 +28,9 @@ own data. To do so, create the following folders:
   lines/validation/handwritten
   lines/validation/printed
 and place your line images in these folders. Train the model by
-running train-model.py, and evaluate it with evaluate-model.py.
+running train-model.py, and evaluate it with evaluate-model.py. Training
+writes models/classifier.tgc in the working directory. Evaluation uses that
+file when present, otherwise the bundled model.
 
 Usage example:
 python3 classify.py 616.jpg

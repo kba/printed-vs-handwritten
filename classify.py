@@ -1,28 +1,18 @@
-import os
+import argparse
 import sys
-import torch
-import pickle
-from torch import nn
 from math import exp
 from PIL import Image
-from tqdm import tqdm
-from torch import optim
-from torchvision import transforms
-from torchvision.datasets import ImageFolder
-from torch.optim.lr_scheduler import LambdaLR
-sys.path.append("../ocrd_typegroups_classifier")
 from ocrd_typegroups_classifier.typegroups_classifier import TypegroupsClassifier
-from ocrd_typegroups_classifier.network.densenet import densenet121
-from ocrd_typegroups_classifier.data.binarization import Sauvola
-from ocrd_typegroups_classifier.data.binarization import Otsu
-from ocrd_typegroups_classifier.data.qloss import QLoss
+from ocrd_typegroups_classifier.model_paths import bundled_model_path
 
 
-if len(sys.argv)!=2:
-    print('Syntax: python3 %s input-textline.jpg' % sys.argv[0])
+parser = argparse.ArgumentParser(description="Classify a text line as printed or handwritten")
+parser.add_argument("image", help="image to classify")
+parser.add_argument("--model", default=bundled_model_path(), help="classifier model file")
+args = parser.parse_args()
 
-img = Image.open(sys.argv[1])
-tgc = TypegroupsClassifier.load(os.path.join('ocrd_typegroups_classifier', 'models', 'classifier.tgc'))
+img = Image.open(args.image)
+tgc = TypegroupsClassifier.load(args.model)
 
 result = tgc.classify(img, 75, 64, False)
 esum = 0

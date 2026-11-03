@@ -1,0 +1,7 @@
+numpy>=1.21,<2
+Pillow>=9,<10
+scikit-image>=0.19,<0.21
+setuptools>=61,<70
+torch>=1.13,<1.14
+torchvision>=0.14,<0.15
+tqdm>=4.60,<5

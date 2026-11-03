@@ -1,5 +1,5 @@
 import os
-import sys
+from pathlib import Path
 import torch
 import pickle
 from torch import nn
@@ -9,8 +9,6 @@ from torchvision import transforms
 from torch.optim.lr_scheduler import LambdaLR
 from tqdm import tqdm
 
-sys.path.append("../ocrd_typegroups_classifier")
-
 from ocrd_typegroups_classifier.network.vraec import vraec101
 from ocrd_typegroups_classifier.network.vraec import vraec50
 from ocrd_typegroups_classifier.typegroups_classifier import TypegroupsClassifier
@@ -19,6 +17,9 @@ from ocrd_typegroups_classifier.data.binarization import Otsu
 from ocrd_typegroups_classifier.data.binarization import Sauvola
 from ocrd_typegroups_classifier.network.densenet import densenet121
 from ocrd_typegroups_classifier.network.resnet import resnet18
+from ocrd_typegroups_classifier.model_paths import bundled_model_path
+
+model_path = Path('models/classifier.tgc')
 
 # Loading and preparing the network
 net = densenet121(num_classes=2)
@@ -42,11 +43,7 @@ tgc = TypegroupsClassifier(
     },
     net
 )
-if os.path.exists(os.path.join('ocrd_typegroups_classifier', 'models', 'classifier.tgc')):
-    tgc = TypegroupsClassifier.load(os.path.join('ocrd_typegroups_classifier', 'models', 'classifier.tgc'))
-else:
-    print('Could not load a model to evaluate')
-    quit(1)
+tgc = TypegroupsClassifier.load(str(model_path) if model_path.exists() else bundled_model_path())
 
 validation = ImageFolder('lines/validation', transform=None)
 validation.target_transform = tgc.classMap.get_target_transform(validation.class_to_idx)

@@ -1,5 +1,5 @@
 import os
-import sys
+from pathlib import Path
 import torch
 import pickle
 from torch import nn
@@ -9,8 +9,6 @@ from torchvision import transforms
 from torch.optim.lr_scheduler import LambdaLR
 from tqdm import tqdm
 
-sys.path.append("../ocrd_typegroups_classifier")
-
 from ocrd_typegroups_classifier.network.vraec import vraec101
 from ocrd_typegroups_classifier.network.vraec import vraec50
 from ocrd_typegroups_classifier.typegroups_classifier import TypegroupsClassifier
@@ -19,6 +17,11 @@ from ocrd_typegroups_classifier.data.binarization import Otsu
 from ocrd_typegroups_classifier.data.binarization import Sauvola
 from ocrd_typegroups_classifier.network.densenet import densenet121
 from ocrd_typegroups_classifier.network.resnet import resnet18
+from ocrd_typegroups_classifier.model_paths import bundled_model_path
+
+model_dir = Path('models')
+model_dir.mkdir(exist_ok=True)
+model_path = model_dir / 'classifier.tgc'
 
 # Loading and preparing the network
 net = densenet121(num_classes=2)
@@ -42,8 +45,10 @@ tgc = TypegroupsClassifier(
     },
     net
 )
-if os.path.exists(os.path.join('ocrd_typegroups_classifier', 'models', 'classifier.tgc')):
-    tgc = TypegroupsClassifier.load(os.path.join('ocrd_typegroups_classifier', 'models', 'classifier.tgc'))
+if model_path.exists():
+    tgc = TypegroupsClassifier.load(str(model_path))
+else:
+    tgc = TypegroupsClassifier.load(bundled_model_path())
 
 # Data transformation & loading
 # Note that due to the rotation, having several sequential shearing
@@ -141,11 +146,11 @@ for epoch in range(30):
     print('Accuracy:', accuracy)
     
     if accuracy>best_validation:
-        tgc.save(os.path.join('ocrd_typegroups_classifier', 'models', 'classifier.tgc'))
+        tgc.save(str(model_path))
         best_validation = accuracy
         print('Network saved')
     else:
-        tgc.save(os.path.join('ocrd_typegroups_classifier', 'models', 'classifier-last.tgc'))
+        tgc.save(str(model_dir / 'classifier-last.tgc'))
 
 
 
