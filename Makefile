@@ -4,6 +4,7 @@ CLASSIFY_GRP ?= PRINTED_VS_HANDWRITTEN
 PYTHON ?= python3
 JOBS ?= 4
 THRESHOLD ?= 0.5
+AGGREGATE_OUTPUT ?= csv
 
 .DEFAULT_GOAL := help
 .PHONY: help prepare-workspaces extract classify aggregate
@@ -49,4 +50,4 @@ classify: ## Classify line images and register JSON results in METS
 	[ "$$found" -eq 1 ] || { echo "No PPN workspaces found in $(PPNS)" >&2; exit 1; }
 
 aggregate: ## Summarize per-line classification scores by PPN
-	@$(PYTHON) "$(abspath scripts/aggregate.py)" "$(PPNS)" "$(CLASSIFY_GRP)" "$(abspath ground-truth.json)" "$(THRESHOLD)"
+	@$(PYTHON) "$(abspath scripts/aggregate.py)" "$(PPNS)" "$(CLASSIFY_GRP)" "$(abspath ground-truth.json)" "$(THRESHOLD)" --output "$(AGGREGATE_OUTPUT)"

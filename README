@@ -64,3 +64,5 @@ files from `PRINTED_VS_HANDWRITTEN`; `PPNS` and `CLASSIFY_GRP` also apply to
 this target. The GT value gets ✅ when the mean score for its class exceeds
 `THRESHOLD` (default `0.5`), otherwise ❌. For example, use
 `make aggregate THRESHOLD=0.7` to require a higher mean score.
+The target writes CSV by default; use `make aggregate AGGREGATE_OUTPUT=markdown`
+for a Markdown table. The script also accepts `--output markdown` directly.

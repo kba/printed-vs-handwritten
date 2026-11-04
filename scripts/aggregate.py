@@ -1,5 +1,7 @@
 """Summarize line classification scores for each PPN workspace."""
 
+import argparse
+import csv
 import json
 from pathlib import Path
 from statistics import fmean, median, pstdev
@@ -20,8 +22,20 @@ def pad(value, width):
     return value + " " * (width - display_width(value))
 
 
-def main(ppns, file_group, ground_truth_path, threshold):
-    threshold = float(threshold)
+def print_markdown(headers, rows):
+    widths = [max(display_width(value) for value in column)
+              for column in zip(headers, *rows)]
+
+    def print_row(row):
+        print("| " + " | ".join(pad(value, width) for value, width in zip(row, widths)) + " |")
+
+    print_row(headers)
+    print("| " + " | ".join("-" * width for width in widths) + " |")
+    for row in rows:
+        print_row(row)
+
+
+def main(ppns, file_group, ground_truth_path, threshold, output):
     if not 0 <= threshold <= 1:
         raise SystemExit("THRESHOLD must be between 0 and 1")
     ground_truth = json.loads(Path(ground_truth_path).read_text())
@@ -48,13 +62,20 @@ def main(ppns, file_group, ground_truth_path, threshold):
     if not rows:
         raise SystemExit(f"No classification JSON files found in {ppns}/PPN*/{file_group}")
 
-    widths = [max(display_width(value) for value in column)
-              for column in zip(headers, *rows)]
-    print(" | ".join(pad(header, width) for header, width in zip(headers, widths)))
-    print("-+-".join("-" * width for width in widths))
-    for row in rows:
-        print(" | ".join(pad(value, width) for value, width in zip(row, widths)))
+    if output == "markdown":
+        print_markdown(headers, rows)
+    else:
+        writer = csv.writer(sys.stdout, lineterminator="\n")
+        writer.writerow(headers)
+        writer.writerows(rows)
 
 
 if __name__ == "__main__":
-    main(*sys.argv[1:])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("ppns", help="directory containing PPN workspaces")
+    parser.add_argument("file_group", help="classification result file group")
+    parser.add_argument("ground_truth", help="ground truth JSON file")
+    parser.add_argument("threshold", type=float, help="minimum mean score for a correct classification")
+    parser.add_argument("--output", choices=("csv", "markdown"), default="csv")
+    args = parser.parse_args()
+    main(args.ppns, args.file_group, args.ground_truth, args.threshold, args.output)
