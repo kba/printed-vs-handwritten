@@ -5,7 +5,7 @@ PYTHON ?= python3
 JOBS ?= 4
 
 .DEFAULT_GOAL := help
-.PHONY: help prepare-workspaces extract classify
+.PHONY: help prepare-workspaces extract classify aggregate
 
 help: ## Show available targets
 	@awk 'BEGIN { FS = ":.*## " } /^[a-zA-Z0-9_.-]+:.*## / { printf "%-20s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
@@ -46,3 +46,6 @@ classify: ## Classify line images and register JSON results in METS
 		  "$(EXTRACT_GRP)" "$(CLASSIFY_GRP)" "$(JOBS)" ); \
 	done; \
 	[ "$$found" -eq 1 ] || { echo "No PPN workspaces found in $(PPNS)" >&2; exit 1; }
+
+aggregate: ## Summarize per-line classification scores by PPN
+	@$(PYTHON) "$(abspath scripts/aggregate.py)" "$(PPNS)" "$(CLASSIFY_GRP)"
