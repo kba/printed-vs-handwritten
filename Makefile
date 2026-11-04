@@ -48,4 +48,4 @@ classify: ## Classify line images and register JSON results in METS
 	[ "$$found" -eq 1 ] || { echo "No PPN workspaces found in $(PPNS)" >&2; exit 1; }
 
 aggregate: ## Summarize per-line classification scores by PPN
-	@$(PYTHON) "$(abspath scripts/aggregate.py)" "$(PPNS)" "$(CLASSIFY_GRP)"
+	@$(PYTHON) "$(abspath scripts/aggregate.py)" "$(PPNS)" "$(CLASSIFY_GRP)" "$(abspath ground-truth.json)"

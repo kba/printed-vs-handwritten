@@ -57,7 +57,8 @@ result per image in `PRINTED_VS_HANDWRITTEN`, linked to the same page.
 Set the worker count with `make classify JOBS=2`. Override the input and
 output groups with `EXTRACT_GRP` and `CLASSIFY_GRP`. Use a different
 workspace root with `make extract PPNS=/path/to/ppns`.
-`make aggregate` prints one row per PPN with the number of classified lines and
-the mean, median, population standard deviation, minimum, and maximum of both
-scores. It reads JSON files from `PRINTED_VS_HANDWRITTEN`; `PPNS` and
-`CLASSIFY_GRP` also apply to this target.
+`make aggregate` prints one row per PPN with its label from `ground-truth.json`,
+the number of classified lines, and the mean, median, and population standard
+deviation of both scores. Missing ground truth is shown as `?`. It reads JSON
+files from `PRINTED_VS_HANDWRITTEN`; `PPNS` and `CLASSIFY_GRP` also apply to
+this target.

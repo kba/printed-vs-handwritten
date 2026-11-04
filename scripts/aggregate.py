@@ -8,13 +8,13 @@ import sys
 
 def summarize(values):
     return (f"{fmean(values):.4f}", f"{median(values):.4f}",
-            f"{pstdev(values):.4f}", f"{min(values):.4f}",
-            f"{max(values):.4f}")
+            f"{pstdev(values):.4f}")
 
 
-def main(ppns, file_group):
-    headers = ("PPN", "Lines", "H mean", "H median", "H stddev", "H min", "H max",
-               "P mean", "P median", "P stddev", "P min", "P max")
+def main(ppns, file_group, ground_truth_path):
+    ground_truth = json.loads(Path(ground_truth_path).read_text())
+    headers = ("PPN", "GT", "Lines", "H mean", "H median", "H stddev",
+               "P mean", "P median", "P stddev")
     rows = []
     for workspace in sorted(Path(ppns).glob("PPN*")):
         if not workspace.is_dir():
@@ -25,7 +25,8 @@ def main(ppns, file_group):
         scores = [json.loads(path.read_text()) for path in files]
         handwritten = [score["handwritten"] for score in scores]
         printed = [score["printed"] for score in scores]
-        rows.append((workspace.name, str(len(files)), *summarize(handwritten),
+        rows.append((workspace.name, ground_truth.get(workspace.name, "?"),
+                     str(len(files)), *summarize(handwritten),
                      *summarize(printed)))
 
     if not rows:
