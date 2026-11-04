@@ -40,7 +40,7 @@ def main(ppns, file_group, ground_truth_path, threshold):
         gt = ground_truth.get(workspace.name, "?")
         if gt in ("handwritten", "printed"):
             mean = fmean(handwritten if gt == "handwritten" else printed)
-            gt += " ✅" if mean > threshold else " ❌"
+            gt = ("✅ " if mean > threshold else "❌ ") + gt
         rows.append((workspace.name, gt,
                      str(len(files)), *summarize(handwritten),
                      *summarize(printed)))
