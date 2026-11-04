@@ -45,6 +45,7 @@ PAGE-XML, and classify the extracted images, install `ocrd` and
     make extract
     make classify
     make aggregate
+    make aggregate-pages
 
 `prepare-workspaces` registers images from `DEFAULT/` with the OCR-D Python API when
 that file group is absent from the workspace METS file. Image page IDs are
@@ -66,3 +67,7 @@ this target. The GT value gets ✅ when the mean score for its class exceeds
 `make aggregate THRESHOLD=0.7` to require a higher mean score.
 The target writes CSV by default; use `make aggregate AGGREGATE_OUTPUT=markdown`
 for a Markdown table. The script also accepts `--output markdown` directly.
+`make aggregate-pages` prints one table with one row per PPN and page.
+It derives `PHYS_0000` from the first four-digit page number in each JSON
+filename and uses the same score statistics and output formats. The PPN ground
+truth is repeated for each page, with its emoji based on that page's mean score.

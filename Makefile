@@ -7,7 +7,7 @@ THRESHOLD ?= 0.5
 AGGREGATE_OUTPUT ?= csv
 
 .DEFAULT_GOAL := help
-.PHONY: help prepare-workspaces extract classify aggregate
+.PHONY: help prepare-workspaces extract classify aggregate aggregate-pages
 
 help: ## Show available targets
 	@awk 'BEGIN { FS = ":.*## " } /^[a-zA-Z0-9_.-]+:.*## / { printf "%-20s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
@@ -51,3 +51,6 @@ classify: ## Classify line images and register JSON results in METS
 
 aggregate: ## Summarize per-line classification scores by PPN
 	@$(PYTHON) "$(abspath scripts/aggregate.py)" "$(PPNS)" "$(CLASSIFY_GRP)" "$(abspath ground-truth.json)" "$(THRESHOLD)" --output "$(AGGREGATE_OUTPUT)"
+
+aggregate-pages: ## Summarize per-line classification scores by page
+	@$(PYTHON) "$(abspath scripts/aggregate.py)" "$(PPNS)" "$(CLASSIFY_GRP)" "$(abspath ground-truth.json)" "$(THRESHOLD)" --output "$(AGGREGATE_OUTPUT)" --level page
