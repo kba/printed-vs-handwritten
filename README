@@ -62,12 +62,14 @@ workspace root with `make extract PPNS=/path/to/ppns`.
 the number of classified lines, and the mean, median, and population standard
 deviation of both scores. Missing ground truth is shown as `?`. It reads JSON
 files from `PRINTED_VS_HANDWRITTEN`; `PPNS` and `CLASSIFY_GRP` also apply to
-this target. The GT value gets ✅ when the mean score for its class exceeds
-`THRESHOLD` (default `0.5`), otherwise ❌. For example, use
+this target. The `correct` column is `true` when the mean score for the GT
+class exceeds `THRESHOLD` (default `0.5`), otherwise `false`. It is empty when
+GT is unknown. For example, use
 `make aggregate THRESHOLD=0.7` to require a higher mean score.
 The target writes CSV by default; use `make aggregate AGGREGATE_OUTPUT=markdown`
-for a Markdown table. The script also accepts `--output markdown` directly.
+for a Markdown table with ✅/❌ in `correct`. The script also accepts
+`--output markdown` directly.
 `make aggregate-pages` prints one table with one row per PPN and page.
 It derives `PHYS_0000` from the first four-digit page number in each JSON
 filename and uses the same score statistics and output formats. The PPN ground
-truth is repeated for each page, with its emoji based on that page's mean score.
+truth is repeated for each page, with `correct` based on that page's mean score.

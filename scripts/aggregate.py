@@ -37,14 +37,16 @@ def print_markdown(headers, rows):
         print_row(row)
 
 
-def summary_row(ppn, page, scores, ground_truth, threshold):
+def summary_row(ppn, page, scores, ground_truth, threshold, output):
     handwritten = [score["handwritten"] for score in scores]
     printed = [score["printed"] for score in scores]
     gt = ground_truth.get(ppn, "?")
+    correct = ""
     if gt in ("handwritten", "printed"):
         mean = fmean(handwritten if gt == "handwritten" else printed)
-        gt = ("✅ " if mean > threshold else "❌ ") + gt
-    return (ppn, *((page,) if page is not None else ()), gt, str(len(scores)),
+        is_correct = mean > threshold
+        correct = ("✅" if is_correct else "❌") if output == "markdown" else str(is_correct).lower()
+    return (ppn, *((page,) if page is not None else ()), gt, correct, str(len(scores)),
             *summarize(handwritten), *summarize(printed))
 
 
@@ -67,7 +69,7 @@ def main(ppns, file_group, ground_truth_path, threshold, output, level):
         raise SystemExit("THRESHOLD must be between 0 and 1")
     ground_truth = json.loads(Path(ground_truth_path).read_text())
     headers = (("PPN", "page") if level == "page" else ("PPN",)) + (
-        "GT", "Lines", "H mean", "H median", "H stddev",
+        "GT", "correct", "Lines", "H mean", "H median", "H stddev",
         "P mean", "P median", "P stddev")
     rows = []
     for workspace in sorted(Path(ppns).glob("PPN*")):
@@ -76,13 +78,13 @@ def main(ppns, file_group, ground_truth_path, threshold, output, level):
         if level == "page":
             for page, scores in sorted(page_scores(workspace, file_group).items()):
                 rows.append(summary_row(workspace.name, page, scores,
-                                        ground_truth, threshold))
+                                        ground_truth, threshold, output))
         else:
             files = sorted((workspace / file_group).glob("*.json"))
             if files:
                 scores = [json.loads(path.read_text()) for path in files]
                 rows.append(summary_row(workspace.name, None, scores,
-                                        ground_truth, threshold))
+                                        ground_truth, threshold, output))
 
     if not rows:
         raise SystemExit(f"No classification JSON files found in {ppns}/PPN*/{file_group}")
