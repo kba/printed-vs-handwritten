@@ -61,4 +61,6 @@ workspace root with `make extract PPNS=/path/to/ppns`.
 the number of classified lines, and the mean, median, and population standard
 deviation of both scores. Missing ground truth is shown as `?`. It reads JSON
 files from `PRINTED_VS_HANDWRITTEN`; `PPNS` and `CLASSIFY_GRP` also apply to
-this target.
+this target. The GT value gets ✅ when the mean score for its class exceeds
+`THRESHOLD` (default `0.5`), otherwise ❌. For example, use
+`make aggregate THRESHOLD=0.7` to require a higher mean score.
