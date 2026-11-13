@@ -1,6 +1,6 @@
 numpy>=1.21,<2
-Pillow>=9,<10
-scikit-image>=0.19,<0.21
+Pillow>=10.1,<11
+scikit-image>=0.22,<0.23
 setuptools>=61,<70
 torch>=2.5,<2.6
 torchvision>=0.20,<0.21

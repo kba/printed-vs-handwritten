@@ -11,7 +11,7 @@ from ocrd_typegroups_classifier.data.classmap import IndexRemap
 def _prepare_image(pil_image, max_width):
     if pil_image.width > max_width:
         height = max(1, round(pil_image.height * max_width / pil_image.width))
-        pil_image = pil_image.resize((max_width, height), Image.BILINEAR)
+        pil_image = pil_image.resize((max_width, height), Image.Resampling.BILINEAR)
     # Five pooling stages need at least 32 pixels in each dimension.
     if min(pil_image.size) < 32:
         padded = Image.new("RGB", (max(32, pil_image.width), max(32, pil_image.height)), "white")

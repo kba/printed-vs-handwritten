@@ -7,7 +7,7 @@ name = "printed-vs-handwritten"
 version = "0.0.1"
 description = "Classify printed and handwritten text lines"
 readme = "README"
-requires-python = ">=3.9,<3.12"
+requires-python = ">=3.9,<3.13"
 license = {file = "LICENSE"}
 dynamic = ["dependencies", "optional-dependencies"]
 
